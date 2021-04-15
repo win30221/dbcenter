@@ -21,6 +21,7 @@ const (
 
 	WRONG_DBTYPE     string = "Wrong DB Type."
 	SAME_DB_IDENTIFY string = "Same DB Identify."
+	No_DB_IDENTIFY   string = "No DB Identify."
 )
 
 type DBCenter struct {
@@ -121,4 +122,14 @@ func (db *DBCenter) newMySQL(config DBConfig) error {
 	db.MySQL[config.Identify] = tempdb
 
 	return nil
+}
+
+func (db *DBCenter) GetMySQL(identify string) (db *sql.DB, err error) {
+	if _, exist := db.MySQL[identify]; exist {
+		db = db.MySQL[identify]
+	} else {
+		err = errors.New(No_DB_IDENTIFY)
+	}
+
+	return
 }
