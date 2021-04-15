@@ -65,7 +65,7 @@ func (dc *DBCenter) NewDB(dbType string, conf DBConfig) error {
 		if _, exist := dc.MySQL[conf.Identify]; exist {
 			return errors.New(SAME_DB_IDENTIFY)
 		}
-		return dc.newMariaDB(conf)
+		return dc.newMySQL(conf)
 
 	// case MONGO:
 	// 	if _, exist := db.Mongo[conf.Identify]; exist {
@@ -116,17 +116,17 @@ func (db *DBCenter) newMySQL(config DBConfig) error {
 		config.MaxLifetime = 600
 	}
 	//10 * time.Minute
-	tempdb.DB().SetMaxOpenConns(config.MaxConn)
-	tempdb.DB().SetMaxIdleConns(config.MaxIdleConn)
-	tempdb.DB().SetConnMaxLifetime(time.Duration(config.MaxLifetime) * time.Second)
+	tempdb.SetMaxOpenConns(config.MaxConn)
+	tempdb.SetMaxIdleConns(config.MaxIdleConn)
+	tempdb.SetConnMaxLifetime(time.Duration(config.MaxLifetime) * time.Second)
 	db.MySQL[config.Identify] = tempdb
 
 	return nil
 }
 
-func (db *DBCenter) GetMySQL(identify string) (db *sql.DB, err error) {
-	if _, exist := db.MySQL[identify]; exist {
-		db = db.MySQL[identify]
+func (dc *DBCenter) GetMySQL(identify string) (db *sql.DB, err error) {
+	if _, exist := dc.MySQL[identify]; exist {
+		db = dc.MySQL[identify]
 	} else {
 		err = errors.New(No_DB_IDENTIFY)
 	}
