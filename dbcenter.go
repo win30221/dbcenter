@@ -62,10 +62,10 @@ func GetPool() *DBCenter {
 func (dc *DBCenter) NewDB(dbType string, conf DBConfig) error {
 	switch dbType {
 	case MYSQL:
-		if _, exist := db.MySQL[conf.Identify]; exist {
+		if _, exist := dc.MySQL[conf.Identify]; exist {
 			return errors.New(SAME_DB_IDENTIFY)
 		}
-		return db.newMariaDB(conf)
+		return dc.newMariaDB(conf)
 
 	// case MONGO:
 	// 	if _, exist := db.Mongo[conf.Identify]; exist {
